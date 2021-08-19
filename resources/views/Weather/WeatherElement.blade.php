@@ -12,7 +12,6 @@ $response = $client->request('GET', $endpoint, ['query' => [
 
 $statusCode = $response->getStatusCode();
 $content = json_decode($response->getBody(), true);
-
 @endphp
 
 @if ($statusCode == '200')
@@ -21,10 +20,7 @@ $content = json_decode($response->getBody(), true);
         {{$content['name']}},
         {{$content['weather'][0]['description']}},
         {{$content['main']['temp']}}°
-        @if ($content['weather'][0]['id'] >= 700 && $content['main']['temp'] >= 18)
-            | It is a nice day to go for a walk!
-        @else
-            | It is not a nice day to go for a walk...
-        @endif
+
+        {{session()->push('cities', [$content['name'],($content['weather'][0]['id'] >= 700 && $content['main']['temp'] >= 18)?true:false])}}
     </div>
 @endif
